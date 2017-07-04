@@ -7,11 +7,28 @@ using System.Threading.Tasks;
 
 namespace UniverseSimulator
 {
-    partial class Configuration
+    partial class Initialization
     {
-        public class Settings
+        public class Parameters
         {
-            public double universeLength { get; set; } = 923320060000;
+            public Parameters()
+            {
+                universeZones = new List<KeyValuePair<object, double>>();
+                universeZones.Add(new KeyValuePair<object, double>(universeCenterRange, 0.40));
+                universeZones.Add(new KeyValuePair<object, double>(universeMediumRange, 0.30));
+                universeZones.Add(new KeyValuePair<object, double>(universeOutskirtsRange, 0.30));
+
+                galaxyZones = new List<KeyValuePair<object, double>>();
+                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.45));
+                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.35));
+                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.20));
+            }
+            //Fixed vars here
+            public List<KeyValuePair<object, double>> universeZones { get; private set; }
+            public List<KeyValuePair<object, double>> galaxyZones { get; private set; }
+
+            //Variables asked to the user start here
+            public double universeRadius { get; set; } = 923320060000;
             public long galaxies { get; set; }
             public long stars { get; set; }
             public double blackHoleProbability { get; set; }
@@ -31,9 +48,17 @@ namespace UniverseSimulator
             public double evolutionSpeed { get; set; }
             public double quatumTunnelingConstant { get; set; }
             public double quasarProbability { get; set; }
+            //Variables asked to the user end here
+
+            public double[] universeCenterRange { get; set; }
+            public double[] universeMediumRange { get; set; }
+            public double[] universeOutskirtsRange { get; set; }
+            public double[] galaxyCenterRange { get; set; }
+            public double[] galaxyMediumRange { get; set; }
+            public double[] galaxyOutskirtsRange { get; set; }
         }
 
-        class Galaxy
+        public class Galaxy
         {
             public long stars { get; set; }
             public int blackHoles { get; set; }
@@ -75,15 +100,5 @@ namespace UniverseSimulator
         {
 
         }
-
-
-        /// <summary>
-        /// Sets a variable
-        /// </summary>
-        /// <param name="type">The type of variable</param>
-        /// <param name="variable">The variable to set</param>
-        /// <param name="name">The readable name of the variable</param>
-        /// <param name="minValue">The minimun allowed value of the variable</param>
-        
     }
 }

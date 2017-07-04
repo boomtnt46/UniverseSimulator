@@ -8,11 +8,11 @@ using Dynamitey;
 
 namespace UniverseSimulator
 {
-    partial class Configuration
+    partial class Initialization
     {
         //limiting vars
-        internal static double maxStarProbability = 100;
-        internal static Settings config = new Settings();
+        internal static double maxStarProbability = 100.0;
+        internal static Parameters parameters = new Parameters();
 
         static void Main(string[] args)
         {
@@ -26,8 +26,8 @@ namespace UniverseSimulator
 
         private static void Simulate()
         {
-            Map universe = new Map(config.universeLength, 923320060000);
-
+            Map universe = new Map(parameters.universeRadius, parameters.universeRadius);
+            universe.ModifyBounds(parameters.universeRadius, parameters.universeRadius);
             //Generate galaxies
             GenerateGalaxies(ref universe);
 
@@ -35,10 +35,16 @@ namespace UniverseSimulator
 
         private static void GenerateGalaxies(ref Map universe)
         {
-            Random rng = new Random();
-            for (int x = 0; x < config.galaxies; x++)
+            for (int x = 0; x < parameters.galaxies; x++)
             {
-                //double xPosition = MathNet.Numerics.Random.RandomExtensions.
+                double[] selectedZone = (double[])Utils.GetObjectByProbability(parameters.universeZones);
+                double xPosition = Utils.Random.NextLong(selectedZone[0], selectedZone[1]);
+                double yPosition = Utils.Random.NextLong(selectedZone[0], selectedZone[1]);
+
+                Galaxy galaxy = new Galaxy();
+                galaxy.stars = Utils.Random.NextLong(parameters.stars - 1000000, parameters.stars + 1000000);
+                galaxy.blackHoles = 1;
+                
             }
         }
 
@@ -69,7 +75,12 @@ namespace UniverseSimulator
             Console.WriteLine();
 
             //Set the values for each probability
-            SetVarCustom("double", "universeLength", "Enter the universe radius (positive double, in astronomical units)", "universe length", 1000000, double.MaxValue);
+            SetVarCustom("double", "universeRadius", "Enter the universe radius (positive double, in astronomical units)", "universe length", 1000000, double.MaxValue);
+            parameters.universeCenterRange[0] = parameters.universeRadius / 4;
+            parameters.universeCenterRange[1] = (parameters.universeRadius / 2) - 1;
+            parameters.universeMediumRange[0] = parameters.universeRadius / 2;
+            parameters.universeMediumRange[1] = (parameters.universeRadius / 2) - 1;
+
             SetVarCustom("long", "galaxies", "Enter the number of galaxies (low values are recommended for perfomance) (positive long)", "number of galaxies", 0.9, 1000000000000);
             SetVarCustom("long", "stars", "Enter the average number of stars in each galaxy (lower values use less cpu) (positive long)", "average number of stars in each galaxy", 1000, 1000000000000000);
             SetProbabilityVar("double", "blackHoleProbability", "black holes", 0, 100);
@@ -113,7 +124,14 @@ namespace UniverseSimulator
         {
             
         }
-
+        /// <summary>
+        /// Sets a variable
+        /// </summary>
+        /// <param name="type">The type of variable</param>
+        /// <param name="variable">The variable to set</param>
+        /// <param name="variableName">The readable name of the variable</param>
+        /// <param name="minValue">The minimun allowed value of the variable</param>
+        /// <param name="maxValue">The maximun allowed value of the variable</param>
         private static void SetProbabilityVar(string type, string variable, string variableName, double minValue, double maxValue)
         {
             bool set = false;
@@ -128,7 +146,7 @@ namespace UniverseSimulator
                         long value = long.Parse(textValue);
                         if (value > minValue && value < maxValue)
                         {
-                            Dynamic.InvokeSet(config, variable, value);
+                            Dynamic.InvokeSet(parameters, variable, value);
                             set = true;
                         }
                         else throw new OutOfBoundsException();
@@ -149,12 +167,12 @@ namespace UniverseSimulator
                                 }
                                 else throw new OutOfBoundsException();
                             }
-                            Dynamic.InvokeSet(config, variable, value / 100);
+                            Dynamic.InvokeSet(parameters, variable, value / 100);
                             set = true;
                         }
                         else throw new OutOfBoundsException();
                     }
-                    Console.WriteLine("{0}: {1}%", variableName, Dynamic.InvokeGet(config, variable));
+                    Console.WriteLine("{0}: {1}%", variableName, Dynamic.InvokeGet(parameters, variable));
 
                 }
                 catch
@@ -179,7 +197,7 @@ namespace UniverseSimulator
                         long value = long.Parse(textValue);
                         if (value > minValue && value < maxValue)
                         {
-                            Dynamic.InvokeSet(config, variable, value);
+                            Dynamic.InvokeSet(parameters, variable, value);
                             set = true;
                         }
                         else throw new OutOfBoundsException();
@@ -189,12 +207,12 @@ namespace UniverseSimulator
                         double value = double.Parse(textValue);
                         if (value > minValue && value < maxValue)
                         {
-                            Dynamic.InvokeSet(config, variable, value);
+                            Dynamic.InvokeSet(parameters, variable, value);
                             set = true;
                         }
                         else throw new OutOfBoundsException();
                     }
-                    Console.WriteLine("{0}: {1}", variableName, Dynamic.InvokeGet(config, variable));
+                    Console.WriteLine("{0}: {1}", variableName, Dynamic.InvokeGet(parameters, variable));
 
                 }
                 catch
