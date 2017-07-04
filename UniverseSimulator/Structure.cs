@@ -13,19 +13,41 @@ namespace UniverseSimulator
         {
             public Parameters()
             {
-                universeZones = new List<KeyValuePair<object, double>>();
-                universeZones.Add(new KeyValuePair<object, double>(universeCenterRange, 0.40));
-                universeZones.Add(new KeyValuePair<object, double>(universeMediumRange, 0.30));
-                universeZones.Add(new KeyValuePair<object, double>(universeOutskirtsRange, 0.30));
+                universeZones = new List<KeyValuePair<object, double>>
+                {
+                    new KeyValuePair<object, double>(universeCenterRange, 0.40),
+                    new KeyValuePair<object, double>(universeMediumRange, 0.30),
+                    new KeyValuePair<object, double>(universeOutskirtsRange, 0.30)
+                };
+                galaxyZones = new List<KeyValuePair<object, double>>
+                {
+                    new KeyValuePair<object, double>(galaxyCenterRange, 0.45),
+                    new KeyValuePair<object, double>(galaxyCenterRange, 0.35),
+                    new KeyValuePair<object, double>(galaxyCenterRange, 0.20)
+                };
 
-                galaxyZones = new List<KeyValuePair<object, double>>();
-                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.45));
-                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.35));
-                galaxyZones.Add(new KeyValuePair<object, double>(galaxyCenterRange, 0.20));
+                starTypes = new List<KeyValuePair<object, double>>
+                {
+                    new KeyValuePair<object, double>(bs as Star, blueStarProbability),
+                    new KeyValuePair<object, double>(bws as Star, blue_whiteStarProbability),
+                    new KeyValuePair<object, double>(ws as Star, whiteStarProbability),
+                    new KeyValuePair<object, double>(yws as Star, yellow_whiteStarProbability),
+                    new KeyValuePair<object, double>(ys as Star, yellowStarProbability),
+                    new KeyValuePair<object, double>(os as Star, orangeStarProbability),
+                    new KeyValuePair<object, double>(rs as Star, redStarProbability)
+                };
             }
             //Fixed vars here
+            public BlueStar bs { get; }
+            public BlueWhiteStar bws { get; }
+            public WhiteStar ws { get; }
+            public YellowWhiteStar yws { get; }
+            public YellowStar ys { get; }
+            public OrangeStar os { get; }
+            public RedStar rs { get; }
             public List<KeyValuePair<object, double>> universeZones { get; private set; }
             public List<KeyValuePair<object, double>> galaxyZones { get; private set; }
+            public List<KeyValuePair<object, double>> starTypes { get; private set; }
 
             //Variables asked to the user start here
             public double universeRadius { get; set; } = 923320060000;
@@ -60,32 +82,81 @@ namespace UniverseSimulator
 
         public class Galaxy
         {
-            public long stars { get; set; }
-            public int blackHoles { get; set; }
-            public class Stars
+            public List<System> systems { get; set; }
+        }
+
+        public abstract class Star
+        {
+
+        }
+
+        public class BlackHole : Star
+        {
+            double mass { get; set; }
+        }
+
+        public class Life
+        {
+            public double lifeDuration { get; set; }
+            public LifeStage lifeStage { get; set; }
+        }
+
+        public class BlueStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+        public class BlueWhiteStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+        public class WhiteStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+        public class YellowWhiteStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+        public class YellowStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+        public class OrangeStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+        }
+        public class RedStar : Star
+        {
+            public double mass { get; set; }
+            public double radius { get; set; }
+
+        }
+
+        public class Planet
+        {
+            public int moons { get; set; }
+            public class Life
             {
-                public long blue { get; set; }
-                public long blue_white { get; set; }
-                public long white { get; set; }
-                public long yellow_white { get; set; }
-                public long yellow { get; set; }
-                public long orange { get; set; }
-                public long red { get; set; }
+                public long lifeDuration { get; set; }
+                public LifeStage lifeStage { get; set; }
             }
-            public class System
-            {
-                public int starMass { get; set; }
-                public int planets { get; set; }
-                public class Planet
-                {
-                    public int moons { get; set; }
-                    public class Life
-                    {
-                        public int lifeDuration { get; set; }
-                        public LifeStage lifeStage { get; set; }
-                    }
-                }
-            }
+        }
+
+        public class System
+        {
+            public Star star;
+            public List<KeyValuePair<Planet, double>> planets;
         }
 
         public class LifeStage

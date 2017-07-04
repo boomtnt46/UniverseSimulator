@@ -42,8 +42,40 @@ namespace UniverseSimulator
                 double yPosition = Utils.Random.NextLong(selectedZone[0], selectedZone[1]);
 
                 Galaxy galaxy = new Galaxy();
-                galaxy.stars = Utils.Random.NextLong(parameters.stars - 1000000, parameters.stars + 1000000);
-                galaxy.blackHoles = 1;
+                long starsToGenerate = Utils.Random.NextLong(parameters.stars - 1000000, parameters.stars + 1000000);
+                for (int i = 0; i<starsToGenerate; i++)
+                {
+                    Star s = Utils.GetObjectByProbability(parameters.starTypes) as Star;
+
+                    if (s is BlueStar)
+                    {
+
+                    }
+                    else if (s is BlueWhiteStar)
+                    {
+
+                    }
+                    else if (s is WhiteStar)
+                    {
+
+                    }
+                    else if (s is YellowWhiteStar)
+                    {
+
+                    }
+                    else if (s is YellowStar)
+                    {
+
+                    }
+                    else if (s is OrangeStar)
+                    {
+
+                    }
+                    else if (s is RedStar)
+                    {
+
+                    }
+                }
                 
             }
         }
@@ -110,7 +142,7 @@ namespace UniverseSimulator
             SetProbabilityVar("double", "lifeExtinctionProbability", "life extinction", 0, 100);
             SetProbabilityVar("double", "intelligentLifeProbability", "intelligent life", 0, 100);
             SetProbabilityVar("double", "intelligentLifeExtinctionProbability", "intelligent life extinction", 0, 100);
-            SetVarCustom("double", "evolutionSpeed", "Enter the evolution speed (positive double)", "evolution speed", 0.000000000000001, 10000);
+            SetVarCustom("double", "evolutionSpeed", "Enter the evolution speed (positive double)", "evolution speed", 0, 10000);
             //SetCustomVar("double", "quatumTunnelingConstant", "Enter the quatum tunneling constant (positive double)", double.MinValue, 1);
             //Still researching this variable, might be removed if it is excessively tricky to implement
 
