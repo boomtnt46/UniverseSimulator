@@ -28,57 +28,44 @@ namespace UniverseSimulator
 
     static class Utils
     {
-        public static object GetObjectByProbability(List<KeyValuePair<object, double>> list)
+        public static object GetObjectByProbability(List<KeyValuePair<object, double>> objectsToChoose)
         {
-            System.Random rng = new System.Random();
-            double rollerino = rng.NextDouble();
+            System.Random rng = new System.Random((int)DateTime.Now.Ticks);
+            double rollerino;
             double cumulative = 0;
-
-            for (int i = 0; i < list.Count; i++)
+            for (int z = 0; z < 2; z++)
             {
-                cumulative += list[i].Value;
-                if (rollerino < cumulative)
+                rollerino = rng.NextDouble();
+                for (int i = 0; i < objectsToChoose.Count; i++)
                 {
-                    return list[i].Key;
+                    cumulative += objectsToChoose[i].Value;
+                    if (rollerino < cumulative)
+                    {
+                        return objectsToChoose[i].Key;
+                    }
                 }
             }
-            return true;
+            return objectsToChoose[objectsToChoose.Count-1].Key;
         }
 
         public static class Random
         {
             public static long NextLong(double minValue, double maxValue)
             {
-                double doubleLowerLimit = minValue;
-                double doubleUpperLimit = maxValue;
+                System.Random r = new System.Random((int)DateTime.Now.Ticks);
 
-                while (doubleLowerLimit > 1)
-                {
-                    doubleLowerLimit = doubleLowerLimit / 10;
-                }
-                int divisionsNum = 0;
-                while (doubleUpperLimit >= 1)
-                {
-                    doubleUpperLimit = doubleUpperLimit / 10;
-                    divisionsNum++;
-                }
+                byte[] buf = new byte[8];
+                r.NextBytes(buf);
+                long longRand = BitConverter.ToInt64(buf, 0);
 
-                long number = 0;
-                System.Random r = new System.Random();
-                bool done = false;
-                while (!done)
-                {
-                    double value = r.NextDouble();
-                    if (value < doubleLowerLimit && value > doubleUpperLimit)
-                    {
-                        number = (long)(value * Math.Pow(10, divisionsNum));
-                        done = true;
-                    }
+                return (Math.Abs(longRand % ((long)maxValue - (long) minValue)) + (long) minValue);
+            }
 
-                }
-
-                return number;
+            public static double NextDouble(double minValue, double maxValue)
+            {
+                return new System.Random((int)DateTime.Now.Ticks).NextDouble() * (maxValue - minValue) + minValue;
             }
         }
+        
     }
 }

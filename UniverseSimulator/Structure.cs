@@ -4,6 +4,7 @@ using System.Linq;
 using Dynamitey;
 using System.Text;
 using System.Threading.Tasks;
+using CharlesDeep;
 
 namespace UniverseSimulator
 {
@@ -11,7 +12,7 @@ namespace UniverseSimulator
     {
         public class Parameters
         {
-            public Parameters()
+            public void InitParameters()
             {
                 universeZones = new List<KeyValuePair<object, double>>
                 {
@@ -28,66 +29,72 @@ namespace UniverseSimulator
 
                 starTypes = new List<KeyValuePair<object, double>>
                 {
-                    new KeyValuePair<object, double>(bs as Star, blueStarProbability),
-                    new KeyValuePair<object, double>(bws as Star, blue_whiteStarProbability),
-                    new KeyValuePair<object, double>(ws as Star, whiteStarProbability),
-                    new KeyValuePair<object, double>(yws as Star, yellow_whiteStarProbability),
-                    new KeyValuePair<object, double>(ys as Star, yellowStarProbability),
-                    new KeyValuePair<object, double>(os as Star, orangeStarProbability),
-                    new KeyValuePair<object, double>(rs as Star, redStarProbability)
+                    new KeyValuePair<object, double>(bs, blueStarProbability),
+                    new KeyValuePair<object, double>(bws, blue_whiteStarProbability),
+                    new KeyValuePair<object, double>(ws, whiteStarProbability),
+                    new KeyValuePair<object, double>(yws, yellow_whiteStarProbability),
+                    new KeyValuePair<object, double>(ys, yellowStarProbability),
+                    new KeyValuePair<object, double>(os, orangeStarProbability),
+                    new KeyValuePair<object, double>(rs, redStarProbability)
                 };
             }
             //Fixed vars here
-            public BlueStar bs { get; }
-            public BlueWhiteStar bws { get; }
-            public WhiteStar ws { get; }
-            public YellowWhiteStar yws { get; }
-            public YellowStar ys { get; }
-            public OrangeStar os { get; }
-            public RedStar rs { get; }
+            public BlueStar bs { get; } = new BlueStar();
+            public BlueWhiteStar bws { get; } = new BlueWhiteStar();
+            public WhiteStar ws { get; } = new WhiteStar();
+            public YellowWhiteStar yws { get; } = new YellowWhiteStar();
+            public YellowStar ys { get; } = new YellowStar();
+            public OrangeStar os { get; } = new OrangeStar();
+            public RedStar rs { get; } = new RedStar();
             public List<KeyValuePair<object, double>> universeZones { get; private set; }
             public List<KeyValuePair<object, double>> galaxyZones { get; private set; }
             public List<KeyValuePair<object, double>> starTypes { get; private set; }
 
             //Variables asked to the user start here
             public double universeRadius { get; set; } = 923320060000;
-            public long galaxies { get; set; }
-            public long stars { get; set; }
-            public double blackHoleProbability { get; set; }
-            public double blueStarProbability { get; set; }
-            public double blue_whiteStarProbability { get; set; }
-            public double whiteStarProbability { get; set; }
-            public double yellow_whiteStarProbability { get; set; }
-            public double yellowStarProbability { get; set; }
-            public double orangeStarProbability { get; set; }
-            public double redStarProbability { get; set; }
-            public double planetProbability { get; set; }
-            public double habitablePlanetProbability { get; set; }
-            public double lifeProbability { get; set; }
-            public double lifeExtinctionProbability { get; set; }
-            public double intelligentLifeProbability { get; set; }
-            public double intelligentLifeExtinctionProbability { get; set; }
-            public double evolutionSpeed { get; set; }
-            public double quatumTunnelingConstant { get; set; }
-            public double quasarProbability { get; set; }
+            public long galaxies { get; set; } = 1;
+            public long stars { get; set; } = 100000;
+            public double blackHoleProbability { get; set; } = 0.0001;
+            public double blueStarProbability { get; set; } = 0.0000001;
+            public double blue_whiteStarProbability { get; set; } = 0.001;
+            public double whiteStarProbability { get; set; } = 0.007;
+            public double yellow_whiteStarProbability { get; set; } = 0.02;
+            public double yellowStarProbability { get; set; } = 0.035;
+            public double orangeStarProbability { get; set; } = 0.08;
+            public double redStarProbability { get; set; } = 0.8;
+            public double planetProbability { get; set; } = 0.6;
+            public double habitablePlanetProbability { get; set; } = 0.02;
+            public double lifeProbability { get; set; } = 0.000001;
+            public double lifeExtinctionProbability { get; set; } = 0.5;
+            public double intelligentLifeProbability { get; set; } = 0.001;
+            public double intelligentLifeExtinctionProbability { get; set; } = 0.3;
+            public double evolutionSpeed { get; set; } = 1;
+            public double quatumTunnelingConstant { get; set; } = 5E-39;
+            public double quasarProbability { get; set; } = 0.04;
             //Variables asked to the user end here
 
-            public double[] universeCenterRange { get; set; }
-            public double[] universeMediumRange { get; set; }
-            public double[] universeOutskirtsRange { get; set; }
-            public double[] galaxyCenterRange { get; set; }
-            public double[] galaxyMediumRange { get; set; }
-            public double[] galaxyOutskirtsRange { get; set; }
+            public double[] universeCenterRange { get; set; } = new double[2];
+            public double[] universeMediumRange { get; set; } = new double[2];
+            public double[] universeOutskirtsRange { get; set; } = new double[2];
+            public double[] galaxyCenterRange { get; set; } = new double[2];
+            public double[] galaxyMediumRange { get; set; } = new double[2];
+            public double[] galaxyOutskirtsRange { get; set; } = new double[2];
         }
 
         public class Galaxy
         {
             public List<System> systems { get; set; }
+            public Map galaxyMap { get; set; }
         }
 
         public abstract class Star
         {
 
+        }
+
+        public class Moon
+        {
+            public double mass { get; set; }
         }
 
         public class BlackHole : Star
@@ -105,7 +112,6 @@ namespace UniverseSimulator
         {
             public double mass { get; set; }
             public double radius { get; set; }
-
         }
         public class BlueWhiteStar : Star
         {
@@ -145,22 +151,29 @@ namespace UniverseSimulator
 
         public class Planet
         {
-            public int moons { get; set; }
-            public class Life
-            {
-                public long lifeDuration { get; set; }
-                public LifeStage lifeStage { get; set; }
-            }
+            public Map planetarySystemMap { get; set; }
+            public PlanetType typeOfPlanet { get; set; }
+            public List<KeyValuePair<Moon, double>> moons { get; set; }
+            public double mass { get; set; }
+            public Life life { get; set; }
         }
 
         public class System
         {
-            public Star star;
-            public List<KeyValuePair<Planet, double>> planets;
+            public Map systemMap { get; set; }
+            public Star star { get; set; }
+            public List<KeyValuePair<Planet, double>> planets { get; set; }
+        }
+
+        public class PlanetType
+        {
+            public PlanetType Rocky { get; }
+            public PlanetType Gaseous { get; }
         }
 
         public class LifeStage
         {
+            public LifeStage None { get; }
             public LifeStage Savage { get; }
             public LifeStage Civilized { get; }
             public LifeStage Advanced { get; }
