@@ -107,46 +107,67 @@ namespace UniverseSimulator
             public double lifeDuration { get; set; }
             public LifeStage lifeStage { get; set; }
         }
-
+    
+        //Times is in millions of years (My)
+        //Distances in Astronomical Units (UA)
         public class BlueStar : Star
         {
+            public const double minimunHabitableZone = 890;
+            public const double maxLifeTime = 3;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
         public class BlueWhiteStar : Star
         {
+            public const double habitableZone = 35;
+            public const double maxLifeTime = 50;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
         }
         public class WhiteStar : Star
         {
+            public const double habitableZone = 6;
+            public const double maxLifeTime = 700;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
-
         }
         public class YellowWhiteStar : Star
         {
+            public const double habitableZone = 2.15;
+            public const double maxLifeTime = 2500;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
         }
         public class YellowStar : Star
         {
+            public const double habitableZone = 1;
+            public const double maxLifeTime = 10000;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
         }
         public class OrangeStar : Star
         {
+            public const double habitableZone = 0.52;
+            public const double maxLifeTime = 33500;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
         public class RedStar : Star
         {
+            public const double habitableZone = 0.1;
+            public const double maxLifeTime = 300000;
+            public double lifeTime = 0;
             public double mass { get; set; }
             public double radius { get; set; }
-
         }
 
         public class Planet
