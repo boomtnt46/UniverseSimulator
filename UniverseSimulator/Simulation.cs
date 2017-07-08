@@ -4,68 +4,74 @@ using System.Linq;
 using CharlesDeep;
 using System.Text;
 using System.Threading.Tasks;
+using static UniverseSimulator.Initialization;
 
 namespace UniverseSimulator
 {
     class Simulation
     {
-        public Simulation(Map universe, Initialization parameters)
+        public Simulation(Map universe, Initialization.Parameters parameters)
         {
             this.universe = universe;
             this.parameters = parameters;
         }
 
         private Map universe { get; set; }
-        private Initialization parameters { get; set; }
+        private Initialization.Parameters parameters { get; set; }
 
         public void Simulate()
         {
-
-        }
-
-
-    }
-
-    static class Utils
-    {
-        public static object GetObjectByProbability(List<KeyValuePair<object, double>> objectsToChoose)
-        {
-            System.Random rng = new System.Random((int)DateTime.Now.Ticks);
-            double rollerino;
-            double cumulative = 0;
-            for (int z = 0; z < 2; z++)
+            foreach (KeyValuePair<object, Position> galaxyAndPosition in universe.GetObjectList())
             {
-                rollerino = rng.NextDouble();
-                for (int i = 0; i < objectsToChoose.Count; i++)
+                Galaxy galaxy = galaxyAndPosition.Key as Galaxy;
+                foreach (Initialization.System system in galaxy.systems)
                 {
-                    cumulative += objectsToChoose[i].Value;
-                    if (rollerino < cumulative)
-                    {
-                        return objectsToChoose[i].Key;
-                    }
+                    var star = TypeOfStar(system.star);
+                    
                 }
             }
-            return objectsToChoose[objectsToChoose.Count-1].Key;
         }
 
-        public static class Random
+        public dynamic TypeOfStar(Star star)
         {
-            public static long NextLong(double minValue, double maxValue)
+
+            if (star is BlueStar)
             {
-                System.Random r = new System.Random((int)DateTime.Now.Ticks);
-
-                byte[] buf = new byte[8];
-                r.NextBytes(buf);
-                long longRand = BitConverter.ToInt64(buf, 0);
-
-                return (Math.Abs(longRand % ((long)maxValue - (long) minValue)) + (long) minValue);
+                return star as BlueStar;
             }
-
-            public static double NextDouble(double minValue, double maxValue)
+            else if (star is BlueWhiteStar)
             {
-                return new System.Random((int)DateTime.Now.Ticks).NextDouble() * (maxValue - minValue) + minValue;
+                return star as BlueWhiteStar;
+
+            }
+            else if (star is WhiteStar)
+            {
+                return star as WhiteStar;
+
+            }
+            else if (star is YellowWhiteStar)
+            {
+                return star as YellowWhiteStar;
+
+            }
+            else if (star is YellowStar)
+            {
+                return star as YellowStar;
+
+            }
+            else if (star is OrangeStar)
+            {
+                return star as OrangeStar;
+
+            }
+            else 
+            {
+                return star as RedStar;
+
             }
         }
-        
+
     }
+
+    
 }

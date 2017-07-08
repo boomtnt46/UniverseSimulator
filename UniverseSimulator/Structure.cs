@@ -5,13 +5,20 @@ using Dynamitey;
 using System.Text;
 using System.Threading.Tasks;
 using CharlesDeep;
+using System.Threading;
 
 namespace UniverseSimulator
 {
     partial class Initialization
     {
+
+        public static class RNG
+        {
+            public static Random rng { get; } = new Random();
+        }
         public class Parameters
         {
+
             public void InitParameters()
             {
                 universeZones = new List<KeyValuePair<object, double>>
@@ -53,7 +60,7 @@ namespace UniverseSimulator
             //Variables asked to the user start here
             public double universeRadius { get; set; } = 923320060000;
             public long galaxies { get; set; } = 1;
-            public long stars { get; set; } = 100000;
+            public long stars { get; set; } = 100000; //This is TEMPORARY!! The before default number was 100000 (too low for a galaxy but it is worth for limiting computaion time)
             public double blackHoleProbability { get; set; } = 0.0001;
             public double blueStarProbability { get; set; } = 0.0000001;
             public double blue_whiteStarProbability { get; set; } = 0.001;
@@ -85,11 +92,12 @@ namespace UniverseSimulator
         {
             public List<System> systems { get; set; }
             public Map galaxyMap { get; set; }
+            public double[] position { get; set; }
         }
 
         public abstract class Star
         {
-
+            
         }
 
         public class Moon
@@ -206,4 +214,45 @@ namespace UniverseSimulator
 
         }
     }
+    static class Utils
+    {
+
+        public static object GetObjectByProbability(List<KeyValuePair<object, double>> objectsToChoose)
+        {
+            double rollerino;
+            double cumulative = 0;
+            for (int z = 0; z < 2; z++)
+            {
+                rollerino = Initialization.RNG.rng.NextDouble();
+                for (int i = 0; i < objectsToChoose.Count; i++)
+                {
+                    cumulative += objectsToChoose[i].Value;
+                    if (rollerino < cumulative)
+                    {
+                        return objectsToChoose[i].Key;
+                    }
+                }
+            }
+            return objectsToChoose[objectsToChoose.Count - 1].Key;
+        }
+
+        public static class Random
+        {
+            public static long NextLong(double minValue, double maxValue)
+            {
+                byte[] buf = new byte[8];
+                Initialization.RNG.rng.NextBytes(buf);
+                long longRand = BitConverter.ToInt64(buf, 0);
+
+                return (Math.Abs(longRand % ((long)maxValue - (long)minValue)) + (long)minValue);
+            }
+
+            public static double NextDouble(double minValue, double maxValue)
+            {
+                return Initialization.RNG.rng.NextDouble() * (maxValue - minValue) + minValue;
+            }
+        }
+
+    }
 }
+

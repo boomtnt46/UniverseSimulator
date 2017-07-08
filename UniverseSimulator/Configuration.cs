@@ -35,6 +35,8 @@ namespace UniverseSimulator
             universe.ModifyBounds(parameters.universeRadius, parameters.universeRadius);
             //Generate galaxies
             GenerateGalaxies(ref universe);
+            Simulation sim = new Simulation(universe, parameters);
+            sim.Simulate();
 
         }
 
@@ -46,23 +48,21 @@ namespace UniverseSimulator
             {
                 double[] selectedZone = Utils.GetObjectByProbability(parameters.universeZones) as double[];
                 double xPosition = Utils.Random.NextLong(selectedZone[0], selectedZone[1]);
-                Thread.Sleep(new TimeSpan(1000));
                 double yPosition = Utils.Random.NextLong(selectedZone[0], selectedZone[1]);
 
                 Galaxy galaxy = new Galaxy();
                 galaxy.systems = new List<System>();
 
                 galaxy.galaxyMap = new Map(parameters.galaxyOutskirtsRange[1]+100000, parameters.galaxyOutskirtsRange[1] + 100000);
+                galaxy.position = new double[2] { xPosition, yPosition };
 
-
-                long starsToGenerate = Utils.Random.NextLong(parameters.stars, parameters.stars + 1000000);
+                long starsToGenerate = Utils.Random.NextLong(parameters.stars, parameters.stars + 100000);
                 Console.WriteLine();
                 for (long i = 0; i<starsToGenerate; i++)
                 {
                     double progress = (i * 100) / starsToGenerate;
                     Console.CursorLeft = 0;
                     Console.Write(progress.ToString() + "%");
-
                     object s = Utils.GetObjectByProbability(parameters.starTypes);
                     
                     Star star;
@@ -171,9 +171,15 @@ namespace UniverseSimulator
                         system.planets.Add(new KeyValuePair<Planet, double>(planet, XplanetLocation));
                     }
                     galaxy.systems.Add(system);
-
                 }
-                Thread.Sleep(new TimeSpan(1));
+                var v = universe.GetObjectList();
+                if (v is null)
+                {
+                    v = new List<KeyValuePair<object, Position>>();
+                }
+                Position pos = new Position();
+                v.Add(new KeyValuePair<object, Position>(galaxy, pos));
+                universe.SetObjectList(v);
             }
         }
 
