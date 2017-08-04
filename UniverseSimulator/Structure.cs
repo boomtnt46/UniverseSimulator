@@ -44,6 +44,16 @@ namespace UniverseSimulator
                     new KeyValuePair<object, double>(os, orangeStarProbability),
                     new KeyValuePair<object, double>(rs, redStarProbability)
                 };
+
+                moonQuantity = new List<KeyValuePair<int, double>>
+                {
+                    new KeyValuePair<int, double>(0, 65),
+                    new KeyValuePair<int, double>(1, 20),
+                    new KeyValuePair<int, double>(2, 5),
+                    new KeyValuePair<int, double>(3, 5.7),
+                    new KeyValuePair<int, double>(5, 4.2),
+                    new KeyValuePair<int, double>(12, 0.1)
+                };
             }
             //Fixed vars here
             public BlueStar bs { get; } = new BlueStar();
@@ -56,6 +66,7 @@ namespace UniverseSimulator
             public List<KeyValuePair<object, double>> universeZones { get; private set; }
             public List<KeyValuePair<object, double>> galaxyZones { get; private set; }
             public List<KeyValuePair<object, double>> starTypes { get; private set; }
+            public List<KeyValuePair<int, double>> moonQuantity { get; private set; }
 
             //Variables asked to the user start here
             public double universeRadius { get; set; } = 923320060000;
@@ -118,11 +129,12 @@ namespace UniverseSimulator
     
         //Times is in millions of years (My)
         //Distances in Astronomical Units (UA)
+        //Masses in Solar Masses
         public class BlueStar : Star
         {
             public const double minimunHabitableZone = 890;
             public const double maxLifeTime = 3;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
@@ -130,7 +142,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 35;
             public const double maxLifeTime = 50;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
@@ -139,7 +151,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 6;
             public const double maxLifeTime = 700;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
@@ -147,7 +159,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 2.15;
             public const double maxLifeTime = 2500;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
@@ -156,7 +168,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 1;
             public const double maxLifeTime = 10000;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
 
@@ -165,7 +177,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 0.52;
             public const double maxLifeTime = 33500;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
@@ -173,7 +185,7 @@ namespace UniverseSimulator
         {
             public const double habitableZone = 0.1;
             public const double maxLifeTime = 300000;
-            public double lifeTime = 0;
+            public double lifeTime { get; set; } = 0;
             public double mass { get; set; }
             public double radius { get; set; }
         }
@@ -191,7 +203,7 @@ namespace UniverseSimulator
         {
             public Map systemMap { get; set; }
             public Star star { get; set; }
-            public List<KeyValuePair<Planet, double>> planets { get; set; }
+            public List<KeyValuePair<Planet, Position>> planets { get; set; }
         }
 
         public class PlanetType
@@ -203,6 +215,7 @@ namespace UniverseSimulator
         public class LifeStage
         {
             public LifeStage None { get; }
+            public LifeStage Miscroscopic { get; }
             public LifeStage Savage { get; }
             public LifeStage Civilized { get; }
             public LifeStage Advanced { get; }
